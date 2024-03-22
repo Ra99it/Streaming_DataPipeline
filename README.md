@@ -29,6 +29,7 @@ API로 로그를 출력해 가상의 시나리오를 구성했습니다.
 | 참가 인원 | 6명 |
 | 게임 시간 | 20분 |
 | 수집할 Log| ip, datetime, account, gametime, method, deadcount, inputkey,status, x, y |
+| Example Log| {"id": "2d038f3c-8bc4-4271-a667-34854119d2d0","ip": "192.168.0.128","account": "testAccount_81","method": "/move","datetime": "2024-03-21T16:04:03.061Z","x": "-111","y": "227","inputkey": "null","status": "0","deathCount": "3","ingametime": "3:39"} |
 | 최종 Log 갯수 | 약 4900개 |
 
 6명의 가상의 사용자를 생성하고, 20분동안 해당 게임세션의 Log를 생성합니다. <br>
@@ -65,7 +66,8 @@ Scala, Python, Java에서 활용할 수 있도록 Cassandra로 Data Mart로 제�
 | --- | --- |
 | 참가 인원 | 100명 |
 | 게임 시간 | 20분 |
-| 출력 로그 | ... |
+| 수집할 로그 | id, ip, datetime, account, method, gender, age |
+| Example Log | {"id": "320ade38-cfa2-42df-8142-b26af760bb29","ip": "192.168.0.111","datetime": "2024-03-21T16:38:02.344Z","account": "testAccount_36","method": "/","status": "0","gender": "female","age": "60-100"} |
 | 최종 Log 갯수 | 약 26000개 |
 
 --------
