@@ -25,36 +25,40 @@ public class DataGenerator implements Runnable{
     private String sessionID;
     private int durationSeconds;
 
+    private String champion;
+
     private Random rand;
 
     private final long MINIMUM_SLEEP_TIME = 5;
     private final long MAXIMUM_SLEEP_TIME = 60 * 50;
     private final String TOPIC_NAME = "gamelogs";
 
-    public DataGenerator(CountDownLatch latch, String ipAddr, String account,String sessionID, int durationSeconds) {
+    public DataGenerator(CountDownLatch latch, String ipAddr, String account,String sessionID, String champion,int durationSeconds) {
         this.latch = latch;
         this.ipAddr = ipAddr;
         this.account = account;
         this.sessionID = sessionID;
+        this.champion = champion;
         this.durationSeconds = durationSeconds;
         this.rand = new Random();
     }
 
     @Override
     public void run() {
-        System.out.println("Starting log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", durationSeconds=" + durationSeconds);
+        System.out.println("Starting log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", champion="+ champion + ", durationSeconds=" + durationSeconds);
 
-        Properties props = new Properties();
+       /* Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
         //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "SoloGameDataGenerator");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);*/
 
         long startTime = System.currentTimeMillis();
         Integer deathCount = 0;
+        Integer itemCount = 0;
 
         while (isDuration(startTime)){
             long sleepTime = MINIMUM_SLEEP_TIME + Double.valueOf(rand.nextDouble() * (MAXIMUM_SLEEP_TIME)).longValue();
@@ -67,10 +71,11 @@ public class DataGenerator implements Runnable{
 
             String method = getMethod();
             OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneId.of("UTC"));
-            long endTime = System.currentTimeMillis();
 
+            long endTime = System.currentTimeMillis();
             long runTime_seconds = (endTime-startTime)/1000;
             long runTime_min = runTime_seconds/60;
+
             String finalTime = runTime_min+":"+(runTime_seconds%60);
             String uuid = getUUID();
             Integer x_direction = getX();
@@ -78,95 +83,61 @@ public class DataGenerator implements Runnable{
             String key = getKey();
             Integer status = getStatus();
 
-            if (method.equals("/move")) {
-                if(status == 1) {
-
-                    String log = String.format(
-                            "{" +
-                                    "\"id\": \"%s\"," +
-                                    "\"ip\": \"%s\"," +
-                                    "\"account\": \"%s\"," +
-                                    "\"method\": \"%s\"," +
-                                    "\"datetime\": \"%s\"," +
-                                    "\"x\": \"%s\"," +
-                                    "\"y\": \"%s\"," +
-                                    "\"inputkey\": \"%s\"," +
-                                    "\"status\": \"%s\"," +
-                                    "\"deathCount\": \"%s\"," +
-                                    "\"ingametime\": \"%s\"" + "}" ,uuid,ipAddr, account,method,offsetDateTime,x_direction,y_direction,key,status, deathCount, finalTime
-                    );
-
-                    JSONParser jsonParser = new JSONParser();
-                    try {
-                        JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
-                        System.out.println(jsonObject);
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                    producer.send(new ProducerRecord<>(TOPIC_NAME, log));
-
-                    status = 0;
-                    deathCount += 1;
-                }
-                String log = String.format(
-                        "{" +
-                                "\"id\": \"%s\"," +
-                                "\"ip\": \"%s\"," +
-                                "\"account\": \"%s\"," +
-                                "\"method\": \"%s\"," +
-                                "\"datetime\": \"%s\"," +
-                                "\"x\": \"%s\"," +
-                                "\"y\": \"%s\"," +
-                                "\"inputkey\": \"%s\"," +
-                                "\"status\": \"%s\"," +
-                                "\"deathCount\": \"%s\"," +
-                                "\"ingametime\": \"%s\"" + "}" ,uuid,ipAddr, account,method,offsetDateTime,x_direction,y_direction,key,status, deathCount, finalTime
-                );
-
-                JSONParser jsonParser = new JSONParser();
-                try {
-                    JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
-                    System.out.println(jsonObject);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                producer.send(new ProducerRecord<>(TOPIC_NAME, log));
-            }else {
-                String log = String.format(
-                        "{" +
-                                "\"id\": \"%s\"," +
-                                "\"ip\": \"%s\"," +
-                                "\"account\": \"%s\"," +
-                                "\"method\": \"%s\"," +
-                                "\"datetime\": \"%s\"," +
-                                "\"x\": \"0\"," +
-                                "\"y\": \"0\"," +
-                                "\"inputkey\": \"0\"," +
-                                "\"status\": \"%s\"," +
-                                "\"deathCount\": \"%s\"," +
-                                "\"ingametime\": \"%s\"" + "}", uuid, ipAddr, account,method,offsetDateTime,status, deathCount, finalTime
-                );
-                JSONParser jsonParser = new JSONParser();
-                try {
-                    JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
-                    System.out.println(jsonObject);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                producer.send(new ProducerRecord<>(TOPIC_NAME, log));
+            if (champion.equals("viktor")) {
+                x_direction = getX_viktor();
+                y_direction = getY_viktor();
+                OutLog(uuid, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime);
+            } else if (method.equals("/wait")){
+                OutLog(uuid, ipAddr, account, champion, method, offsetDateTime, 0, 0, "0", status, deathCount, finalTime);
+            } else if (rand.nextDouble()>0.995 && itemCount < 6) {
+                itemCount += 1;
+                OutLog(uuid, ipAddr, account,champion, "/buyItem", offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime);
+            } else if (status == 1) {
+                OutLog(uuid, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime);
+                status = 0;
+                deathCount += 1;
+            }
+            else {
+                OutLog(uuid, ipAddr, account, champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime);
             }
         }
         //producer.close();
-        System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", durationSeconds=" + durationSeconds);
+        System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", champion="+ champion + ", durationSeconds=" + durationSeconds);
         this.latch.countDown();
     }
 
+    private  void OutLog(String uuid, String ipAddr, String account, String champion,String method, OffsetDateTime offsetDateTime, Integer x_direction, Integer y_direction, String key, Integer status, Integer deathCount, String finalTime) {
+        String log = String.format(
+                "{" +
+                        "\"id\": \"%s\"," +
+                        "\"ip\": \"%s\"," +
+                        "\"account\": \"%s\"," +
+                        "\"champion\": \"%s\"," +
+                        "\"method\": \"%s\"," +
+                        "\"datetime\": \"%s\"," +
+                        "\"x\": \"%s\"," +
+                        "\"y\": \"%s\"," +
+                        "\"inputkey\": \"%s\"," +
+                        "\"status\": \"%s\"," +
+                        "\"deathCount\": \"%s\"," +
+                        "\"ingametime\": \"%s\"" + "}" ,uuid,ipAddr, account,champion, method,offsetDateTime,x_direction,y_direction,key,status, deathCount, finalTime
+        );
+
+        JSONParser jsonParser = new JSONParser();
+        try {
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
+            System.out.println(jsonObject);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        //producer.send(new ProducerRecord<>(TOPIC_NAME, log));
+    }
     private boolean isDuration(long startTime) {
         return System.currentTimeMillis() - startTime < durationSeconds * 1000L;
     }
 
    private String getMethod() {
-       if (rand.nextDouble() > 0.80) {
+       if (rand.nextDouble() > 0.85) {
            return "/wait";
        }else {
            return "/move";
@@ -177,10 +148,10 @@ public class DataGenerator implements Runnable{
         int x = 0;
 
         if (rand.nextDouble() > 0.99) {
-            x = rand.nextInt(2000 - (-2000) +1) + (-2000);
+            x = rand.nextInt(1500 - (-1500) +1) + (-1500);
             return x;
         } else {
-            x = rand.nextInt(400 - (-400) +1) + (-400);
+            x = rand.nextInt(600 - (-600) +1) + (-600);
             return x;
         }
    }
@@ -189,10 +160,34 @@ public class DataGenerator implements Runnable{
         int y = 0;
 
         if (rand.nextDouble() > 0.99) {
-            y = rand.nextInt(2000 - (-2000) +1) + (-2000);
+            y = rand.nextInt(1500 - (-1500) +1) + (-1500);
             return y;
         } else {
-            y = rand.nextInt(400 - (-400) +1) + (-400);
+            y = rand.nextInt(600 - (-600) +1) + (-600);
+            return y;
+        }
+    }
+
+    private int getX_viktor(){
+        int x = 0;
+
+        if (rand.nextDouble() > 0.99) {
+            x = rand.nextInt(1500 - (-1500) +1) + (-1500);
+            return x;
+        } else {
+            x = rand.nextInt(600 - (-600) +1) + (-600);
+            return x;
+        }
+    }
+
+    private int getY_viktor(){
+        int y = 0;
+
+        if (rand.nextDouble() > 0.75) {
+            y = rand.nextInt(3000 - (-3000) +1) + (-3000);
+            return y;
+        } else {
+            y = rand.nextInt(600 - (-600) +1) + (-600);
             return y;
         }
     }
