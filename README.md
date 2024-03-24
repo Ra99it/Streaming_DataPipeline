@@ -31,7 +31,6 @@
 
 6명의 가상의 사용자를 생성하고, 20분동안 6명의 사용자의 로그를 생성합니다.<br>
 한창 좋아했던 게임인 리그 오브 레전드를 참조했습니다.
-
 <br>
 
 ### 가상 시나리오
@@ -88,6 +87,24 @@
 20분 동안 약 4900개의 로그 데이터가 수집되었고, 원본 Log 데이터는 Data Lake인 hadoop hdfs로 저장하며, 전처리 후 효율적으로 <br>
 
 Scala, Python, Java에서 활용할 수 있도록 Cassandra로 Data Mart로 제공했습니다.
+
+```
+최종적으로 저장 될 로그
+  {        
+            "datetime":"2024-03-24T11:25:29.845Z",
+            "method":"\/move",
+            "ingametime":"0:0",
+            "ip":"192.168.0.50",
+            "x":"277",
+            "y":"-351",
+            "deathCount":"0",
+            "id":"b405fd3c-785b-4e42-a825-52a75f3d82a4",
+            "inputkey":"b",
+            "account":"testAccount_56",
+            "champion":"vex",
+            "status":"0"
+  } 
+```
 
 -------
 
