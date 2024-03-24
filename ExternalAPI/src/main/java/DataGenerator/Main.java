@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int userNum = 1;
+    static int userNum = 6;
     static int durationSeconds = 1200;
 
     static int championNum = userNum;
