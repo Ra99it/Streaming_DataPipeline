@@ -20,21 +20,28 @@
 
 
 ## 가상 시나리오
-API로 로그를 출력해 가상의 시나리오를 구성했습니다.
 
 ### 이상탐지를 위한 GameLog Streaming
+
+한창 좋아했던 게임인 리그 오브 레전드를 참조했습니다.
 
 | Command | Description |
 | --- | --- |
 | 참가 인원 | 6명 |
 | 게임 시간 | 20분 |
-| 수집할 Log| ip, datetime, account, gametime, method, deadcount, inputkey,status, x, y |
-| Example Log| {"id": "2d038f3c-8bc4-4271-a667-34854119d2d0","ip": "192.168.0.128","account": "testAccount_81","method": "/move","datetime": "2024-03-21T16:04:03.061Z","x": "-111","y": "227","inputkey": "null","status": "0","deathCount": "3","ingametime": "3:39"} |
+| 원본 로그 | {"datetime":"2024-03-24T11:25:29.845Z","method":"\/move","ingametime":"0:0","ip":"192.168.0.50","x":"277","y":"-351","deathCount":"0","id":"b405fd3c-785b-4e42-a825-52a75f3d82a4","inputkey":"b","account":"testAccount_56","champion":"vex","status":"0"} |
 | 최종 Log 갯수 | 약 4900개 |
 
-6명의 가상의 사용자를 생성하고, 20분동안 해당 게임세션의 Log를 생성합니다. <br>
+6명의 가상의 사용자를 생성하고, 20분동안 해당 게임세션의 위 원본로그를 생성합니다. <br>
 
-로그는 Ip, DateTime, Account, GameTime,Method, Deadcount, InputKey,Status, X, Y를 생성하고, Kafka로 전송하게 됩니다. <br>
+|Azir|Viktor|Orianna|Vex|Ryze|Zilean|
+|----|---|---|---|---|---|
+|![Azir](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/5b88072a-4f8d-4679-a941-765514e72ffc)|![Viktor](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/093c0efd-a463-464e-9b25-a9e3de626933)|![Orianna](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/e2964948-b8ae-4293-a5d8-a07db6cde62e)|![Vex](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/0138cf0a-47c4-4034-a60c-1f1bbf2966ee)|![Ryze](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/d69dca34-027a-4300-9266-61c0a6ae88bf)|![Zilean](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/38ac02e7-07f6-4d97-a489-a61990384340)|
+|일반유저|의심유저|일반유저|일반유저|일반유저|일반유저|
+
+
+
+로그는 Ip, DateTime, Account, GameTime,Method, Deadcount, InputKey,Status, X, Y, Champion을 생성하고, Kafka로 전송하게 됩니다. <br>
 
 DateTime은 해당 로그가 생성된 시간을 수집하고, GameTime은 해당 게임의 진행시간을 수집하게 됩니다. <br>
 
