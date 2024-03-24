@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int userNum = 100;
+    static int userNum = 2;
     static int durationSeconds = 1200;
     static Set<String> ipSet = new HashSet<>();
     static Set<String> accSet = new HashSet<>();
