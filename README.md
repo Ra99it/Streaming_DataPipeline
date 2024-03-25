@@ -86,7 +86,7 @@
 
 20분 동안 약 4900개의 로그 데이터가 수집되었고, 원본 Log 데이터는 Data Lake인 hadoop hdfs로 저장하며, 전처리 후 효율적으로 <br>
 
-Scala, Python, Java에서 활용할 수 있도록 Cassandra로 Data Mart로 제공했습니다.
+Scala, Python, Java에서 활용할 수 있도록 Storage인 Cassandra로 Data Mart로 제공했습니다.
 
 ```
 최종적으로 저장 될 로그
