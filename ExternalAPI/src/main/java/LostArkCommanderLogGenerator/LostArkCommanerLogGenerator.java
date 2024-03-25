@@ -17,6 +17,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
     private String account;
     private String sessionID;
     private String classname;
+    private Integer success;
     private int durationSeconds;
     private String sessionRoomID;
     private String[] bossInfo;
@@ -24,7 +25,9 @@ public class LostArkCommanerLogGenerator implements Runnable{
     private final long MINIMUM_SLEEP_TIME = 50;
     private final long MAXIMUM_SLEEP_TIME = 60 * 150;
 
-    public LostArkCommanerLogGenerator(CountDownLatch latch, String ipAddr, String account, String classname,String sessionID, int durationSeconds, String sessionRoomID, String[] bossInfo){
+
+
+    public LostArkCommanerLogGenerator(CountDownLatch latch, String ipAddr, String account, String classname,String sessionID, int durationSeconds, String sessionRoomID, String[] bossInfo, Integer success){
         this.latch = latch;
         this.ipAddr = ipAddr;
         this.account = account;
@@ -33,6 +36,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
         this.durationSeconds = durationSeconds;
         this.sessionRoomID = sessionRoomID;
         this.bossInfo = bossInfo;
+        this.success = success;
         this.rand = new Random();
     }
     @Override
@@ -41,6 +45,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
 
         long startTime = System.currentTimeMillis();
         LocalDateTime now = LocalDateTime.now();
+        Integer status = 0;
 
         while(isDuration(startTime)){
             long sleepTime = MINIMUM_SLEEP_TIME + Double.valueOf(rand.nextDouble() * (MAXIMUM_SLEEP_TIME)).longValue();
@@ -60,19 +65,72 @@ public class LostArkCommanerLogGenerator implements Runnable{
             int x_dir = getX();
             int y_dir = getY();
             String inputkey =getKey();
-            int status = getStatus();
 
-            OutLog(sessionRoomID, now, finalTime,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status);
+            if (method.equals("/wait")) {
+                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, 0, 0, inputkey, status);
+            }else if (status == 1){
+                break;
+            } else {
+                if (bossInfo[0].equals("Valtan")){
+                    if (rand.nextDouble() > 0.99) {
+                        status = 1;
+                    }else if (String.valueOf(runTime_seconds).equals(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }else if (bossInfo[0].equals("Abrelshud")) {
+                    if (rand.nextDouble() > 0.98) {
+                        status = 1;
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }else if (bossInfo[0].equals("Kamen")) {
+                    if (rand.nextDouble() > 0.95) {
+                        status = 1;
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }else if (bossInfo[0].equals("Kouku-Saton")) {
+                    if (rand.nextDouble() > 0.99) {
+                        status = 1;
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }else if (bossInfo[0].equals("Illiakan")) {
+                    if (rand.nextDouble() > 0.98) {
+                        status = 1;
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }else if (bossInfo[0].equals("Biackiss")) {
+                    if (rand.nextDouble() > 0.99) {
+                        status = 1;
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
+                        success = 1;
+                        break;
+                    }
+                }
+                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status);
+            }
         }
-        System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", durationSeconds=" + durationSeconds);
+
+        if (status == 1) {
+            System.out.println( account+"님이 사망했습니다. 직업: "+ classname + ",방 번호 :"+sessionRoomID+", 군단장: "+bossInfo[0]);
+        }
+        System.out.println( account+"님의 작업이 끝났습니다. 직업: "+ classname + ",방 번호 :"+sessionRoomID+", 군단장: "+bossInfo[0]);
         this.latch.countDown();
     }
 
-    private  void OutLog(String sessionRoomID, LocalDateTime startTime, String finaltime, String classname, String account, String ipAddr, String bossName, String bossDiff, String bossEndTime, String method, int x_dir, int y_dir, String inputkey, int status) {
+    private  void OutLog(String sessionRoomID, LocalDateTime startTime, String finaltime, Integer success, String classname, String account, String ipAddr, String bossName, String bossDiff, String bossEndTime, String method, int x_dir, int y_dir, String inputkey, int status) {
         String log = String.format("{\n" +
                 "    \"sessionID\": \"%s\",\n" +
                 "    \"startTime\": \"%s\",\n" +
                 "    \"gametime\": \"%s\",\n" +
+                "    \"success\": \"%s\", \n" +
                 "    \"User\": {\n" +
                 "        \"class\": \"%s\",\n" +
                 "        \"account\": \"%s\",\n" +
@@ -88,7 +146,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
                 "    \"y\": \"%s\",\n" +
                 "    \"inpukey\": \"%s\",\n" +
                 "    \"status\": \"%s\"\n" +
-                "}",sessionRoomID,startTime,finaltime,classname,account,ipAddr,bossName,bossDiff,bossEndTime,method,x_dir,y_dir,inputkey,status);
+                "}",sessionRoomID,startTime,finaltime,success,classname,account,ipAddr,bossName,bossDiff,bossEndTime,method,x_dir,y_dir,inputkey,status);
 
         JSONParser jsonParser = new JSONParser();
         try {
@@ -159,11 +217,10 @@ public class LostArkCommanerLogGenerator implements Runnable{
     }
 
     private int getStatus() {
-        if (rand.nextDouble() > 0.99) {
+        if (rand.nextDouble() > 0.50) {
             return 1;
-        }else {
+        } else {
             return 0;
         }
     }
-
 }

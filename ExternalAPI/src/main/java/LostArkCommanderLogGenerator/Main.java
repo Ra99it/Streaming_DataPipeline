@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int roomNum = 1;
+    static int roomNum = 3;
     public static void main(String[] args) {
         CountDownLatch latch = new CountDownLatch(roomNum);
         ExecutorService executor = Executors.newFixedThreadPool(roomNum);

@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public class LoasArkRoomGenerator implements Runnable{
     private final String sessionRoomID;
 
-    static int userNum = 2;
+    static int userNum = 8;
     static Random rand = new Random();
     static Set<String> ipSet = new HashSet<>();
     static Set<String> accSet = new HashSet<>();
@@ -31,7 +31,8 @@ public class LoasArkRoomGenerator implements Runnable{
                 String ipAddr = getIpAddr();
                 String account = getAccount();
                 String classname = getClassName();
-                executor.execute(new LostArkCommanerLogGenerator(latch, ipAddr, account, classname,UUID.randomUUID().toString(), durationSeconds, sessionRoomID, bossInfo));
+                Integer success = 0;
+                executor.execute(new LostArkCommanerLogGenerator(latch, ipAddr, account, classname,UUID.randomUUID().toString(), durationSeconds, sessionRoomID, bossInfo, success));
         });
 
         executor.shutdown();
@@ -68,7 +69,8 @@ public class LoasArkRoomGenerator implements Runnable{
     }
     private static String getClassName() {
         String[] classArray = new String[] {"Berserker", "Destroyer", "Warlord", "Holyknight", "Striker", "Breaker", "Artist", "Aeromancer"
-                , "Blade", "Arcana", "Bard", "Scouter", "DevilHunter", "Infighter", "Slayer"};
+                , "Blade", "Arcana", "Bard", "Scouter", "DevilHunter", "Infighter", "Slayer", "Battle Master", "Soul Master", "Lance Master", "Blaster",
+                "Hawk Eye", "Gunslinger", "Arcana", "Summoner", "Sorceress", "Demonic", "Reaper", "Souleater"};
 
         return classArray[rand.nextInt(classArray.length)];
     }
