@@ -144,10 +144,10 @@ public class DataGenerator implements Runnable{
         int x = 0;
 
         if (rand.nextDouble() > 0.99) {
-            x = rand.nextInt(1500 - (-1500) +1) + (-1500);
+            x = rand.nextInt(1250 - (-1250) +1) + (-1250);
             return x;
         } else {
-            x = rand.nextInt(600 - (-600) +1) + (-600);
+            x = rand.nextInt(400 - (-400) +1) + (-400);
             return x;
         }
    }
@@ -156,10 +156,10 @@ public class DataGenerator implements Runnable{
         int y = 0;
 
         if (rand.nextDouble() > 0.99) {
-            y = rand.nextInt(1500 - (-1500) +1) + (-1500);
+            y = rand.nextInt(1250 - (-1250) +1) + (-1250);
             return y;
         } else {
-            y = rand.nextInt(600 - (-600) +1) + (-600);
+            y = rand.nextInt(400 - (-400) +1) + (-400);
             return y;
         }
     }
@@ -167,11 +167,11 @@ public class DataGenerator implements Runnable{
     private int getX_viktor(){
         int x = 0;
 
-        if (rand.nextDouble() > 0.99) {
-            x = rand.nextInt(1500 - (-1500) +1) + (-1500);
+        if (rand.nextDouble() > 0.70) {
+            x = rand.nextInt(3000 - (-3000) +1) + (-3000);
             return x;
         } else {
-            x = rand.nextInt(600 - (-600) +1) + (-600);
+            x = rand.nextInt(400 - (-400) +1) + (-400);
             return x;
         }
     }
@@ -179,11 +179,11 @@ public class DataGenerator implements Runnable{
     private int getY_viktor(){
         int y = 0;
 
-        if (rand.nextDouble() > 0.75) {
+        if (rand.nextDouble() > 0.70) {
             y = rand.nextInt(3000 - (-3000) +1) + (-3000);
             return y;
         } else {
-            y = rand.nextInt(600 - (-600) +1) + (-600);
+            y = rand.nextInt(400 - (-400) +1) + (-400);
             return y;
         }
     }
