@@ -66,17 +66,25 @@ public class LodgmentDataGenerator implements Runnable{
             OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneId.of("UTC"));
             String uuid = getUUID();
 
-            if (status == 1) {
-                if (rand.nextDouble() > 0.98) {
-                    status = 0;
-                    OutLog(uuid, ipAddr, offsetDateTime, account, "/fefund", status, gender, age);
-                }
-            }
 
             if (method.matches("(\\/buy\\/places\\/\\d{1,3})")){
                 status = 1;
                 OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
-            }else {
+            } else  if (status == 1) {
+                if (rand.nextDouble() > 0.98) {
+                    status = 0;
+                    OutLog(uuid, ipAddr, offsetDateTime, account, "/fefund", status, gender, age);
+                } else {
+                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                }
+            } else if (gender.equals("female")) {
+                if (rand.nextDouble() > 0.94) {
+                    status = 1;
+                    OutLog(uuid, ipAddr, offsetDateTime, account, "/buy/places/"+rand.nextInt(50), status, gender, age);
+                } else {
+                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                }
+            } else {
                 OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
             }
         }
@@ -131,10 +139,10 @@ public class LodgmentDataGenerator implements Runnable{
                 return "/leisure";
             }
         } else if (rand.nextDouble() > 0.7){
-            if (rand.nextDouble() > 0.95) {
-                return "/buy/places/"+rand.nextInt(100);
+            if (rand.nextDouble() > 0.97) {
+                return "/buy/places/"+rand.nextInt(50);
             } else {
-                return "/places/"+rand.nextInt(100);
+                return "/places/"+rand.nextInt(50);
             }
         } else{
             return "/";

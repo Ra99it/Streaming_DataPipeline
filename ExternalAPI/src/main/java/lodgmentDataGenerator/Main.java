@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int userNum = 2;
+    static int userNum = 150;
     static int durationSeconds = 1200;
     static Set<String> ipSet = new HashSet<>();
     static Set<String> accSet = new HashSet<>();
@@ -65,13 +65,13 @@ public class Main {
     }
 
     private static String getAge() {
-        if (rand.nextDouble() > 0.5) {
+        if (rand.nextDouble() > 0.3) {
             return "20-29";
-        } else if (rand.nextDouble() > 0.6) {
+        } else if (rand.nextDouble() > 0.5) {
             return "30-39";
         } else if (rand.nextDouble() > 0.7) {
             return "40-49";
-        } else if (rand.nextDouble() > 0.8) {
+        } else if (rand.nextDouble() > 0.9) {
             return "50-59";
         } else {
             return "60-100";
