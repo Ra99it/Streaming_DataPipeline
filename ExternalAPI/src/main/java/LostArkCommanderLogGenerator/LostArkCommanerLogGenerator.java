@@ -1,5 +1,9 @@
 package LostArkCommanderLogGenerator;
 
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -7,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -25,6 +30,8 @@ public class LostArkCommanerLogGenerator implements Runnable{
     private final long MINIMUM_SLEEP_TIME = 50;
     private final long MAXIMUM_SLEEP_TIME = 60 * 150;
 
+    private final String TOPIC_NAME = "lostark_commander_logs";
+
 
 
     public LostArkCommanerLogGenerator(CountDownLatch latch, String ipAddr, String account, String classname,String sessionID, int durationSeconds, String sessionRoomID, String[] bossInfo, Integer success){
@@ -42,6 +49,15 @@ public class LostArkCommanerLogGenerator implements Runnable{
     @Override
     public void run() {
         System.out.println( account+"님이 참가했습니다. 직업: "+ classname + ",방 번호 :"+sessionRoomID+", 군단장: "+bossInfo[0]);
+
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
+        //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, "SoloGameDataGenerator");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         long startTime = System.currentTimeMillis();
         LocalDateTime now = LocalDateTime.now();
@@ -67,7 +83,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
             String inputkey =getKey();
 
             if (method.equals("/wait")) {
-                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, 0, 0, inputkey, status);
+                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, 0, 0, inputkey, status,producer);
             }else if (status == 1){
                 break;
             } else {
@@ -114,7 +130,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
                         break;
                     }
                 }
-                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status);
+                OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
             }
         }
 
@@ -125,7 +141,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
         this.latch.countDown();
     }
 
-    private  void OutLog(String sessionRoomID, LocalDateTime startTime, String finaltime, Integer success, String classname, String account, String ipAddr, String bossName, String bossDiff, String bossEndTime, String method, int x_dir, int y_dir, String inputkey, int status) {
+    private  void OutLog(String sessionRoomID, LocalDateTime startTime, String finaltime, Integer success, String classname, String account, String ipAddr, String bossName, String bossDiff, String bossEndTime, String method, int x_dir, int y_dir, String inputkey, int status, KafkaProducer<String, String> producer) {
         String log = String.format("{\n" +
                 "    \"sessionID\": \"%s\",\n" +
                 "    \"startTime\": \"%s\",\n" +
@@ -155,7 +171,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        //producer.send(new ProducerRecord<>(TOPIC_NAME, log));
+        producer.send(new ProducerRecord<>(TOPIC_NAME, log));
     }
 
     private boolean isDuration(long startTime) {
