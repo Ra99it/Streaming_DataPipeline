@@ -97,6 +97,7 @@ Scala, Python, Java에서 활용할 수 있도록 Storage인 Cassandra로 Data M
             "ip":"192.168.0.50",
             "x":"277",
             "y":"-351",
+            "x+y" : "123",
             "deathCount":"0",
             "id":"b405fd3c-785b-4e42-a825-52a75f3d82a4",
             "inputkey":"b",
