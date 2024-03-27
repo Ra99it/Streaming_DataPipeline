@@ -110,14 +110,43 @@ Scala, Python, Java에서 활용할 수 있도록 Storage인 Cassandra로 Data M
 -------
 
 
-### Hotel_Web_Log_Streaming
+## Hotel_Web_Log_Streaming
 | Command | Description |
 | --- | --- |
 | 참가 인원 | 100명 |
 | 게임 시간 | 20분 |
-| 수집할 로그 | id, ip, datetime, account, method, gender, age |
-| Example Log | {"id": "320ade38-cfa2-42df-8142-b26af760bb29","ip": "192.168.0.111","datetime": "2024-03-21T16:38:02.344Z","account": "testAccount_36","method": "/","status": "0","gender": "female","age": "60-100"} |
-| 최종 Log 갯수 | 약 26000개 |
+| 최종 Log 갯수 | 약 13000개 |
+
+100명의 사용자를 생성하고, 20분동안 100명의 로그를 생성합니다.<br>
+해당 API를 제작할 때, 야놀자(https://www.yanolja.com/) 를 참조해서 로그를 작성했습니다.
+
+### 가상 시나리오
+
+![1](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/c485de40-4d1b-4643-b835-f890b3b5a8d0)
+
+먼저, 사용자가 메인 화면으로 들어오면서 숙소를 찾는 과정을 가상 시나리오로 선정했습니다.
+
+| Method | Description |
+| --- | --- |
+| / | 사용자가 메인 페이지에 처음 들어오거나, 돌아올 때 호출하는 메소드입니다. |
+| /sub-home/hotel | 메인 페이지 상단에 호텔/리조트를 클릭 시 호출되는 메소드입니다. |
+| /sub-home/pension | 메인 페이지 상단에 펜션/풀빌라를 클릭 시 호출되는 메소드입니다. |
+| /sub-home/redidence | 메인 페이지 상단에 가족형숙소를 클릭 시 호출되는 메소드입니다. |
+| /sub-home/motel | 메인 페이지 상단에 모텔을 클릭 시 호출되는 메소드입니다. |
+| /flights | 메인 페이지 상단에 항공을 클릭 시 호출되는 메소드입니다. |
+| /sub-home/global | 메인 페이지 상단에 해외숙소를 클릭 시 호출되는 메소드입니다. |
+| /sub-home/transportation | 메인 페이지 상단에 교통을 클릭 시 호출되는 메소드입니다. |
+| /leisure | 메인 페이지 상단에 레저/티켓을 클릭 시 호출되는 메소드입니다. |
+| /places | 사용자가 숙소를 클릭 했을 때 호출하는 메소드입니다. |
+| /buy/places/숫자 | 사용자가 숙소를 구매 또는 예약했을 때 호출하는 메소드입니다. |
+| /refund | 사용자가 숙소 및 예약을 취소, 환불 했을 때 호출하는 메소드입니다. |
+
+```
+원본 로그
+  {        
+          추가
+  } 
+```
 
 --------
 
