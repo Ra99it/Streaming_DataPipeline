@@ -29,8 +29,7 @@
 | 게임 시간 | 20분 |
 | 최종 수집 된 Log 갯수 | 약 4900개 |
 
-6명의 가상의 사용자를 생성하고, 20분동안 6명의 사용자의 로그를 생성합니다.<br>
-한창 좋아했던 게임인 리그 오브 레전드를 참조했습니다.
+*한창 좋아했던 게임인 리그 오브 레전드를 참조했습니다.*
 <br>
 
 ### 가상 시나리오
@@ -40,8 +39,12 @@
 |![Azir](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/5b88072a-4f8d-4679-a941-765514e72ffc)|![Viktor](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/093c0efd-a463-464e-9b25-a9e3de626933)|![Orianna](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/e2964948-b8ae-4293-a5d8-a07db6cde62e)|![Vex](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/0138cf0a-47c4-4034-a60c-1f1bbf2966ee)|![Ryze](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/d69dca34-027a-4300-9266-61c0a6ae88bf)|![Zilean](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/38ac02e7-07f6-4d97-a489-a61990384340)|
 |일반유저|의심유저|일반유저|일반유저|일반유저|일반유저|
 
-해당 시나리오에선, Viktor를 선택한 사용자가 외부 프로그램을 의심할 수 있는 유저로 지정했습니다.
-다른사용자와의 차이점은 다른 사용자에 비해 마우스의 좌표의 이상값의 확률이 많아집니다.
+----
+1. 해당 시나리오에서의 사용자는 총 6명입니다.
+2. Viktor를 제외한 다른 챔피언은 정상적인 사용자입니다.
+3. Viktor 사용자는 정상적인 사용자보다 마우스 좌표 이상값의 확률이 정상적인 사용자보다 많습니다.
+4. 해당 시나리오는 5대5가 아닌 6명이 각각 개인전을 한다는 설정으로 로그를 생성하도록 했습니다.
+----
 <br>
 
 ```
@@ -118,14 +121,18 @@ Scala, Python, Java에서 활용할 수 있도록 Storage인 Cassandra로 Data M
 | 게임 시간 | 20분 |
 | 최종 Log 갯수 | 약 13000개 |
 
-100명의 사용자를 생성하고, 20분동안 100명의 로그를 생성합니다.<br>
-해당 API를 제작할 때, 야놀자(https://www.yanolja.com/) 를 참조해서 로그를 작성했습니다.
+*해당 API를 제작할 때, 야놀자(https://www.yanolja.com/) 를 참조해서 로그를 작성했습니다.*
 
 ### 가상 시나리오
 
 ![1](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/c485de40-4d1b-4643-b835-f890b3b5a8d0)
 
-먼저, 사용자가 메인 화면으로 들어오면서 숙소를 찾는 과정을 가상 시나리오로 선정했습니다.
+---
+1. 해당 사이트를 이용하는 사용자의 수는 100명입니다.
+2. 100명의 사용자는 약 20분동안 사이트를 이용하게 됩니다.
+3. 100명의 사용자가 숙소를 찾는 과정에서 로그를 생성하도록 했습니다.
+4. 사용자는 숙소를 예약할 수 있으며, 환불 할 수 있습니다.
+---
 
 ```
 원본 로그
