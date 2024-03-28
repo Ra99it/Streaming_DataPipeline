@@ -16,7 +16,7 @@ public class LoasArkRoomGenerator implements Runnable{
     static Random rand = new Random();
     static Set<String> ipSet = new HashSet<>();
     static Set<String> accSet = new HashSet<>();
-    static int durationSeconds = 600;
+    static int durationSeconds = 1320;
 
     public LoasArkRoomGenerator(String sessionRoomID) {
         this.sessionRoomID = sessionRoomID;
@@ -83,7 +83,7 @@ public class LoasArkRoomGenerator implements Runnable{
                 bossInfo = new String[]{"Valtan", "2", "600"};
                 break;
             case 1:
-                bossInfo = new String[]{"Abrelshud", "4", "600"};
+                bossInfo = new String[]{"Abrelshud", "4", "900"};
                 break;
             case 2:
                 bossInfo = new String[]{"Kamen", "10", "1200"};
