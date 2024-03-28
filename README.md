@@ -15,7 +15,7 @@
 |de-kafka-cluster-2|t2.xlarge |Kafka, fluentd|
 |de-kafka-cluster-3|t2.xlarge |Kafka, fluentd|
 
-**노트북 환경은 Zeppelin을 사용하고 있습니다**
+**3. 노트북 환경은 Zeppelin을 사용하고 있습니다**
 
 ## 데이터 파이프라인 아키텍처
 ![streaming_1 drawio (1)](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/4ee9a2ae-e449-435e-8339-076eee53dd1e)
@@ -286,4 +286,16 @@ Log
 사망했는지, 살아있는지 정보를 담고있는 로그입니다. <br>
 
 이렇게 수집된 데이터는 Data Warehouse로 StartTime과 SessionID, Account 세가지로 Partition 나누어 효율적으로 저장하게 됩니다.
+
+### 데이터 정보
+
+**생성된 방과 선정된 보스 및 레이드 성공 여부 확인**
+![image](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/017f9e83-69a8-4e5b-8c94-cfe97525d80e)
+
+시나리오 환경에 맞게 5개의 방이 생겼고, 랜덤으로 보스가 선정되었습니다.
+
+**아브렐슈드 레이드의 참가한 인원과 클래스 정보**
+![image](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/3cab1529-049d-4e57-9786-4fbb8497c744)
+
+
 
