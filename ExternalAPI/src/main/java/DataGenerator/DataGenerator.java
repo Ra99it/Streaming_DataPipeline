@@ -86,7 +86,7 @@ public class DataGenerator implements Runnable{
                 OutLog(uuid, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
             } else if (method.equals("/wait")){
                 OutLog(uuid, ipAddr, account, champion, method, offsetDateTime, 0, 0, "0", status, deathCount, finalTime, producer);
-            } else if (rand.nextDouble()>0.995 && itemCount < 6) {
+            } else if (rand.nextDouble()>0.97 && itemCount < 6) {
                 itemCount += 1;
                 OutLog(uuid, ipAddr, account,champion, "/buyItem", offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
             } else if (status == 1) {

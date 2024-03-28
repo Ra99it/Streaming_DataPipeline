@@ -41,7 +41,7 @@ public class LodgmentDataGenerator implements Runnable{
     public void run() {
         System.out.println("Starting log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", durationSeconds=" + durationSeconds);
 
-        /*Properties props = new Properties();
+        Properties props = new Properties();
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
         //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
@@ -49,7 +49,7 @@ public class LodgmentDataGenerator implements Runnable{
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        KafkaProducer<String, String> producer = new KafkaProducer<>(props);*/
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         long startTime = System.currentTimeMillis();
 
@@ -69,30 +69,30 @@ public class LodgmentDataGenerator implements Runnable{
 
             if (method.matches("(\\/buy\\/places\\/\\d{1,3})")){
                 status = 1;
-                OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age, producer);
             } else  if (status == 1) {
                 if (rand.nextDouble() > 0.98) {
                     status = 0;
-                    OutLog(uuid, ipAddr, offsetDateTime, account, "/fefund", status, gender, age);
+                    OutLog(uuid, ipAddr, offsetDateTime, account, "/fefund", status, gender, age, producer);
                 } else {
-                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age, producer);
                 }
             } else if (gender.equals("female")) {
                 if (rand.nextDouble() > 0.94) {
                     status = 1;
-                    OutLog(uuid, ipAddr, offsetDateTime, account, "/buy/places/"+rand.nextInt(50), status, gender, age);
+                    OutLog(uuid, ipAddr, offsetDateTime, account, "/buy/places/"+rand.nextInt(50), status, gender, age, producer);
                 } else {
-                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                    OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age, producer);
                 }
             } else {
-                OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age);
+                OutLog(uuid, ipAddr, offsetDateTime, account, method, status, gender, age, producer);
             }
         }
         System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", durationSeconds=" + durationSeconds);
         this.latch.countDown();
     }
 
-    private  void OutLog(String uuid, String ipAddr, OffsetDateTime offsetDateTime, String account, String method, Integer status, String gender, String age) {
+    private  void OutLog(String uuid, String ipAddr, OffsetDateTime offsetDateTime, String account, String method, Integer status, String gender, String age, KafkaProducer<String, String> producer) {
         String log = String.format(
                 "{" +
                         "\"id\": \"%s\"," +

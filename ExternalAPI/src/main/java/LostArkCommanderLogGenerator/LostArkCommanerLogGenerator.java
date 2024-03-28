@@ -30,7 +30,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
     private final long MINIMUM_SLEEP_TIME = 50;
     private final long MAXIMUM_SLEEP_TIME = 60 * 150;
 
-    private final String TOPIC_NAME = "lostark_commander_logs";
+    private final String TOPIC_NAME = "lostarklogs";
 
 
 
@@ -53,7 +53,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
         //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
-        props.put(ProducerConfig.CLIENT_ID_CONFIG, "SoloGameDataGenerator");
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, "LostArkCommanderLogGenerator");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
@@ -90,22 +90,25 @@ public class LostArkCommanerLogGenerator implements Runnable{
                 if (bossInfo[0].equals("Valtan")){
                     if (rand.nextDouble() > 0.99) {
                         status = 1;
-                    }else if (String.valueOf(runTime_seconds).equals(bossInfo[2])){
+                    }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }else if (bossInfo[0].equals("Abrelshud")) {
-                    if (rand.nextDouble() > 0.98) {
+                    if (rand.nextDouble() > 0.990) {
                         status = 1;
                     }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }else if (bossInfo[0].equals("Kamen")) {
-                    if (rand.nextDouble() > 0.95) {
+                    if (rand.nextDouble() > 0.991) {
                         status = 1;
                     }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }else if (bossInfo[0].equals("Kouku-Saton")) {
@@ -113,13 +116,15 @@ public class LostArkCommanerLogGenerator implements Runnable{
                         status = 1;
                     }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }else if (bossInfo[0].equals("Illiakan")) {
-                    if (rand.nextDouble() > 0.98) {
+                    if (rand.nextDouble() > 0.99) {
                         status = 1;
                     }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }else if (bossInfo[0].equals("Biackiss")) {
@@ -127,6 +132,7 @@ public class LostArkCommanerLogGenerator implements Runnable{
                         status = 1;
                     }else if ((int)runTime_seconds > Integer.valueOf(bossInfo[2])){
                         success = 1;
+                        OutLog(sessionRoomID, now, finalTime,success,classname,account, ipAddr,bossInfo[0], bossInfo[1], bossInfo[2], method, x_dir, y_dir, inputkey, status,producer);
                         break;
                     }
                 }
@@ -167,11 +173,11 @@ public class LostArkCommanerLogGenerator implements Runnable{
         JSONParser jsonParser = new JSONParser();
         try {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
+            producer.send(new ProducerRecord<>(TOPIC_NAME, String.valueOf(jsonObject)));
             System.out.println(jsonObject);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        producer.send(new ProducerRecord<>(TOPIC_NAME, log));
     }
 
     private boolean isDuration(long startTime) {
