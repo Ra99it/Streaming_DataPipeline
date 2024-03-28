@@ -236,20 +236,44 @@ hotel을 클릭했는지 pension을 클릭했는지 값으로 남겨두게 했�
 -----
 
 ```
-원본 로그 (추가)
-{        
-  {
-      "id": "f19dc589-7856-4bae-b5ba-fc9e0bc65aa5",
-      "ip": "192.168.0.144",
-      "datetime": "2024-03-26T16:34:00.450Z",
-      "account": "testAccount_28",
-      "method": "/",
-      "status": "1",
-      "gender": "female",
-      "age": "20-29",
-      "buyNum" : "0",
-      "clickNum" : "0",
-      "catagory_subhome" : "null"
-  }
-} 
+원본 로그
+{
+    "sessionID": "2ca61813-cdd8-4661-a56c-4165a714fde5",
+    "startTime": "2024-03-28T00:20:03.006",
+    "gametime": "0:1",
+    "success": "0",
+    "Boss": {
+      "difficulty": "10",
+      "name": "Kamen",
+      "endTime": "1200"
+    },
+    "User": {
+      "ip": "192.168.0.168",
+      "class": "Demonic",
+      "account": "testAccount_53"
+    },
+    "method": "/move",
+    "x": "-121",
+    "y": "295",
+    "inputkey": "space",
+    "status": "0"
+}
 ```
+
+SessionID는 생성된 방의 ID를 담고, StartTime은 레이드가 시작 된 시간을 담은 정보입니다 <br>
+
+GameTime은 현재 방의 진행된 시간을 담고있고, Success는 해당 방의 레이드가 최종적으로 성공했는지, 실패했는지 알 수 있는 로그입니다. <br>
+
+보스마다 지정 된 시간 안에 플레이어가 살아있다면, Success는 1의 값을 가지게 됩니다. Boss는 보스의 정보를 담고있습니다. 이름 및 시간과, 난이도 등등 <br>
+
+User은 참가한 인원의 Ip와 Class, Account를 담은 로그입니다. Method는 플레이어가 호출한 메소드 정보를 남긴 로그입니다. <br>
+
+| Method | Description |
+| --- | --- |
+| /move | 마우스를 클릭 할 때, 출력되는 메소드입니다. 메소드 호출 시 마우스의 x,y 좌표를 저장합니다. |
+| /wait | 사용자가 멈춰있는 상태입니다. |
+
+마우스의 X,Y좌표를 저장하고, InputKey는 플레이어가 입력한 키를 남긴 로그입니다. Status는 해당 플레이어가 레이드 도중 <br>
+
+사망했는지, 살아있는지 정보를 담고있는 로그입니다.
+
