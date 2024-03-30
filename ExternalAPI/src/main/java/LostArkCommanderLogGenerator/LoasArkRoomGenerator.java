@@ -32,6 +32,7 @@ public class LoasArkRoomGenerator implements Runnable{
                 String account = getAccount();
                 String classname = getClassName();
                 Integer success = 0;
+
                 executor.execute(new LostArkCommanerLogGenerator(latch, ipAddr, account, classname,UUID.randomUUID().toString(), durationSeconds, sessionRoomID, bossInfo, success));
         });
 
@@ -80,22 +81,22 @@ public class LoasArkRoomGenerator implements Runnable{
         String[] bossInfo;
         switch (num) {
             case 0:
-                bossInfo = new String[]{"Valtan", "2", "600"};
+                bossInfo = new String[]{"Valtan", "1445", "600"};
                 break;
             case 1:
-                bossInfo = new String[]{"Abrelshud", "4", "900"};
+                bossInfo = new String[]{"Abrelshud", "1560", "900"};
                 break;
             case 2:
-                bossInfo = new String[]{"Kamen", "10", "1200"};
+                bossInfo = new String[]{"Kamen", "1630", "1200"};
                 break;
             case 3:
-                bossInfo = new String[]{"Kouku-Saton", "3", "600"};
+                bossInfo = new String[]{"Kouku-Saton", "1475", "600"};
                 break;
             case 4:
-                bossInfo = new String[]{"Illiakan", "6", "600"};
+                bossInfo = new String[]{"Illiakan", "1600", "600"};
                 break;
             case 5:
-                bossInfo = new String[]{"Biackiss", "3", "600"};
+                bossInfo = new String[]{"Biackiss", "1460", "600"};
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + num);
