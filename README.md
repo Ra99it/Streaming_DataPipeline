@@ -289,5 +289,7 @@ Log
 
 이렇게 수집된 데이터는 Data Warehouse로 StartTime과 SessionID, Account 세가지로 Partition 나누어 효율적으로 저장하게 됩니다.
 
+-----------
 
+## 광고 API
 
