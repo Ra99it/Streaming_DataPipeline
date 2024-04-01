@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int adsNum = 3;
+    static int adsNum = 1;
     static Set<String> adSet = new HashSet<>();
     static Random rand = new Random();
     public static void main(String[] args) {
@@ -56,23 +56,30 @@ public class Main {
 
             switch (num) {
                 case 0 :
-                    ad[0] = "yanolja";
-                    ad[1] = "야놀자 광고 설명";
-                    ad[2] = "lodgment";
+                    ad[0] = "야놀자";
+                    ad[1] = "숙박과 관련된 광고입니다.";
+                    ad[2] = "lodgment,event";
                     ad[3] = "2024-03-31";
                     ad[4] = "2024-04-15";
                     break;
                 case 1 :
-                    ad[0] = "LoL";
-                    ad[1] = "AOS GAME";
-                    ad[2] = "AOS";
+                    ad[0] = "리그오브레전드";
+                    ad[1] = "리그오브레전드와 관련된 광고입니다.";
+                    ad[2] = "game";
+                    ad[3] = "2024-03-31";
+                    ad[4] = "2024-04-15";
+                    break;
+                case 2 :
+                    ad[0] = "유튜브";
+                    ad[1] = "유튜브 광고 입니다.";
+                    ad[2] = "youtube";
                     ad[3] = "2024-03-31";
                     ad[4] = "2024-04-15";
                     break;
                 default:
-                    ad[0] = "LostArk";
-                    ad[1] = "RPG";
-                    ad[2] = "RPG";
+                    ad[0] = "로스트아크";
+                    ad[1] = "RPG와 관련된 광고입니다.";
+                    ad[2] = "game";
                     ad[3] = "2024-03-31";
                     ad[4] = "2024-04-15";
                     break;

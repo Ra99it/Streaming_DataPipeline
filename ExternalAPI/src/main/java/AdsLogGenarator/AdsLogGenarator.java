@@ -19,7 +19,7 @@ public class AdsLogGenarator implements Runnable{
     private String ad_start_time;
     private String ad_end_time;
     private static Random rand;
-    static int userNum = 1;
+    static int userNum = 2;
     static int durationSeconds = 600;
     static Set<String> accSet = new HashSet<>();
 
@@ -80,8 +80,16 @@ public class AdsLogGenarator implements Runnable{
     }
 
     private static Integer getAge() {
-        int age = rand.nextInt(100);
+        while (true) {
+            int age = rand.nextInt(100);
 
-        return age;
+            if (rand.nextDouble() > 0.99) {
+                return rand.nextInt(30) + 70;
+            } else if (rand.nextDouble() > 0.95) {
+                return rand.nextInt(31) + 40;
+            }else {
+                return rand.nextInt(21) + 20;
+            }
+        }
     }
 }
