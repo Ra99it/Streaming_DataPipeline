@@ -15,7 +15,16 @@
 |de-kafka-cluster-2|t2.xlarge |Kafka, fluentd|
 |de-kafka-cluster-3|t2.xlarge |Kafka, fluentd|
 
-**3. 노트북 환경은 Zeppelin을 사용하고 있습니다**
+<b>3. Airflow Cluster</b>
+|인스턴스 이름|성능|기술|
+|------|---|---|
+|airflow-master-01|t3a.xlarge |Airflow|
+|airflow-worker-01|t3a.small |Airflow|
+|airflow-worker-02|t3a.small |Airflow|
+|airflow-mysql-01|t3a.large |MYSQL|
+|airflow-redis-01|t3a.micro |Redis|
+
+**4. 노트북 환경은 Zeppelin을 사용하고 있습니다**
 
 ## 데이터 파이프라인 아키텍처
 ![streaming_1 drawio (1)](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/4ee9a2ae-e449-435e-8339-076eee53dd1e)
