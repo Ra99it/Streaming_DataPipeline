@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 
 public class Main {
-    static int adsNum = 1;
+    static int adsNum = 4;
     static Set<String> adSet = new HashSet<>();
     static Random rand = new Random();
     public static void main(String[] args) {
