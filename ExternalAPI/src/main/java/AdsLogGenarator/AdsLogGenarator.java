@@ -19,8 +19,8 @@ public class AdsLogGenarator implements Runnable{
     private String ad_start_time;
     private String ad_end_time;
     private static Random rand;
-    static int userNum = 2;
-    static int durationSeconds = 600;
+    static int userNum = 100;
+    static int durationSeconds = 1200;
     static Set<String> accSet = new HashSet<>();
 
     public AdsLogGenarator(String adID, String ad_name, String ad_explain, String ad_genre, Integer viewing_time, Integer click_count, String ad_start_time, String ad_end_time) {

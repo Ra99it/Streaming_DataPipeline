@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
@@ -34,7 +36,7 @@ public class AdsLogUserGenerator implements Runnable{
     private final long MINIMUM_SLEEP_TIME = 100;
     private final long MAXIMUM_SLEEP_TIME = 60 * 300;
 
-    private final String TOPIC_NAME = "adslogs";
+    private final String TOPIC_NAME = "adlogs";
 
     private long click_time = 0;
     private Integer click_sum = 0;
@@ -81,6 +83,8 @@ public class AdsLogUserGenerator implements Runnable{
                 e.printStackTrace();
             }
 
+            OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneId.of("UTC"));
+
             if (click) {
                 long waitTime = getWaitTime(click_time);
                 if (waitTime > 60) {
@@ -93,14 +97,14 @@ public class AdsLogUserGenerator implements Runnable{
                         click = true;
                         click_sum += 1;
                         click_time = System.currentTimeMillis();
-                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, producer);
+                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, offsetDateTime,producer);
                     }
                 }else if (gender.equals("female")) {
                     if (rand.nextDouble() > 0.99) {
                         click = true;
                         click_sum += 1;
                         click_time = System.currentTimeMillis();
-                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, producer);
+                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, offsetDateTime,producer);
                     }
                 }
             }
@@ -111,7 +115,7 @@ public class AdsLogUserGenerator implements Runnable{
                     view = false;
                     total_time = (int) viewTime;
                     view_sum += total_time;
-                    OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, producer);
+                    OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, offsetDateTime, producer);
                 }
             } else {
                 if (gender.equals("male")) {
@@ -119,14 +123,14 @@ public class AdsLogUserGenerator implements Runnable{
                         view = true;
                         total_time = 0;
                         viewTime_start = System.currentTimeMillis();
-                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, producer);
+                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, offsetDateTime, producer);
                     }
                 }else if (gender.equals("female")) {
                     if (rand.nextDouble() > 0.95) {
                         view = true;
                         total_time = 0;
                         viewTime_start = System.currentTimeMillis();
-                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, producer);
+                        OutLog(adID, ad_name, ad_explain, ad_genre, view_sum, click_sum, ad_start_time, ad_end_time, account, gender, age, total_time, click, view, offsetDateTime, producer);
                     }
                 }
             }
@@ -134,7 +138,7 @@ public class AdsLogUserGenerator implements Runnable{
         this.latch.countDown();
     }
 
-    private  void OutLog(String adID, String ad_name, String ad_explain, String ad_genre, long viewing_time, Integer click_count, String ad_start_time, String ad_end_time, String account, String gender, Integer age, Integer total_time, boolean click, boolean view, KafkaProducer<String, String> producer) {
+    private  void OutLog(String adID, String ad_name, String ad_explain, String ad_genre, long viewing_time, Integer click_count, String ad_start_time, String ad_end_time, String account, String gender, Integer age, Integer total_time, boolean click, boolean view, OffsetDateTime offsetDateTime,KafkaProducer<String, String> producer) {
         String log = String.format(
                 "{\n" +
                         "\"Ad\": {" +
@@ -153,8 +157,9 @@ public class AdsLogUserGenerator implements Runnable{
                         "    \"age\": \"%s\"," +
                         "    \"click\": \"%s\"," +
                         "    \"view\": \"%s\"," +
-                        "    \"total_time\": \"%s\"" +
-                        "}" + "}",adID, ad_name, ad_explain, ad_genre, viewing_time, click_count, ad_start_time, ad_end_time, account, gender, age, click, view,total_time
+                        "    \"total_time\": \"%s\"," +
+                        "    \"offset_time\": \"%s\"" +
+                        "}" + "}",adID, ad_name, ad_explain, ad_genre, viewing_time, click_count, ad_start_time, ad_end_time, account, gender, age, click, view,total_time,offsetDateTime
         );
 
         JSONParser jsonParser = new JSONParser();
