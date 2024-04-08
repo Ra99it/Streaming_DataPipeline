@@ -318,7 +318,7 @@ Log
 -----
 
 ```
-Log
+원본 로그
 {
   "Ad": {
     "start_time": "2024-03-31",
@@ -340,4 +340,51 @@ Log
   }
 }
 ```
+**Ad**는 광고의 정보를 담은 Key값 입니다. <br>
 
+**Start_time, Ad_id, ad_name, genre, endtime, click_count, viewing_time, ad_explain**의 정보를 갖고있습니다. <br>
+
+**Start_time**과 **End_time**은 해당 광고를 게시하는 기간을 저장합니다 <br>
+
+**AD_id**는 광고의 ID 값을 저장합니다. <br>
+
+**Genre**는 광고의 장르 정보를 담고 있습니다. <br>
+
+**AD_explain**은 광고의 간단한 설명을 담고 있습니다. <br>
+
+**Click_count**는 해당 광고가 얼마나 클릭 됐는지 집계된 count를 저장하게 됩니다. <br>
+해당 API에서는 광고클릭 하고 약 1분의 시간동안 중복 클릭은 집계되지 않습니다. <br>
+
+**viewing_time**은 사용자가 광고를 본 시간을 집계한 정보를 저장하고 있습니다. <br>
+
+**User**은 사용자의 관련된 정보를 저장한 값입니다. <br>
+
+**account, age, gender, click, view, total_time** 정보를 담고 있습니다. <br>
+
+각각 계정명과 나이, 성별을 저장하고, 사용자가 광고를 클릭 했을 때 click 정보를 저장하게 됩니다. <br>
+
+**view**는 사용자가 광고를 시청하고 있을 때 저장되는 값이고, total_time은 해당 사용자의 총 광고 시간을 담고있습니다. <br>
+
+```
+Data
+{
+  "Ad": {
+    "start_time": "2024-03-31",
+    "ad_id": "76015c91-f1a9-4e4c-9a4c-c9130b7d27fe",
+    "ad_name": "리그오브레전드",
+    "genre": "game",
+    "end_time": "2024-04-15",
+    "click_count": "0",
+    "viewing_time": "0",
+    "ad_explain": "리그오브레전드와 관련된 광고입니다."
+  },
+  "User": {
+    "view": "true",
+    "gender": "female",
+    "total_time": "0",
+    "click": "false",
+    "account": "testAccount_11",
+    "age": "36"
+  }
+}
+```
