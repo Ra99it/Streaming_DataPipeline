@@ -43,8 +43,8 @@ public class LodgmentDataGenerator implements Runnable{
 
         Properties props = new Properties();
 
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
-        //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
+        //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "SoloGameDataGenerator");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -108,11 +108,12 @@ public class LodgmentDataGenerator implements Runnable{
         JSONParser jsonParser = new JSONParser();
         try {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(log);
+            producer.send(new ProducerRecord<>(TOPIC_NAME, String.valueOf(jsonObject)));
             System.out.println(jsonObject);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        //producer.send(new ProducerRecord<>(TOPIC_NAME, log));
+
     }
 
     private boolean isDuration(long startTime) {
