@@ -1,4 +1,4 @@
-package DataGenerator;
+package AnomalyGamePlay;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -10,33 +10,33 @@ import org.json.simple.parser.ParseException;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.Properties;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
-public class DataGenerator implements Runnable{
-    private CountDownLatch latch;
+
+public class AnomalyGamePlay implements Runnable{
+    static int userNum;
+    private String sessionRoomID;
+    static OffsetDateTime createRoomDate;
+
     private String ipAddr;
     private String account;
     private String sessionID;
+    private String champion;
+    static Random rand = new Random();
     private int durationSeconds;
 
-    private String champion;
-
-    private Random rand;
-
-    static int index = 0;
-
-    private final long MINIMUM_SLEEP_TIME = 5;
-    private final long MAXIMUM_SLEEP_TIME = 60 * 50;
+    private final long MINIMUM_SLEEP_TIME = 50;
+    private final long MAXIMUM_SLEEP_TIME = 60 * 300;
     private final String TOPIC_NAME = "gamelogs";
-
-    public DataGenerator(CountDownLatch latch, String ipAddr, String account,String sessionID, String champion,int durationSeconds) {
+    private CountDownLatch latch;
+    static int index = 0;
+    public AnomalyGamePlay(CountDownLatch latch, String sessionRoomID, OffsetDateTime createRoomDate, String ipAddr, String account, String champion, int durationSeconds) {
         this.latch = latch;
+        this.sessionRoomID = sessionRoomID;
+        this.createRoomDate = createRoomDate;
         this.ipAddr = ipAddr;
         this.account = account;
-        this.sessionID = sessionID;
         this.champion = champion;
         this.durationSeconds = durationSeconds;
         this.rand = new Random();
@@ -44,11 +44,11 @@ public class DataGenerator implements Runnable{
 
     @Override
     public void run() {
-        System.out.println("Starting log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", champion="+ champion + ", durationSeconds=" + durationSeconds);
+        System.out.println(account+ "님이 참가하셨습니다. 챔피언: "+ champion  + " ( ip: "  + ipAddr +", account="+ account +", sessionRoomID=" + sessionRoomID + ", durationSeconds=" + durationSeconds);
 
         Properties props = new Properties();
-        //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-cluster-01:9092,kafka-cluster-02:9092,kafka-cluster-03:9092");
+        //props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "spark-worker-01:9092,spark-worker-02:9092,spark-worker-03:9092");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "SoloGameDataGenerator");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -77,7 +77,6 @@ public class DataGenerator implements Runnable{
 
             String finalTime = runTime_min+":"+(runTime_seconds%60);
             int id = getIndexNumber();
-            String uuid = getUUID();
             Integer x_direction = getX();
             Integer y_direction = getY();
             String key = getKey();
@@ -86,29 +85,30 @@ public class DataGenerator implements Runnable{
             if (champion.equals("viktor")) {
                 x_direction = getX_viktor();
                 y_direction = getY_viktor();
-                OutLog(id, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
+                OutLog(sessionRoomID, id, createRoomDate, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
             } else if (method.equals("/wait")){
-                OutLog(id, ipAddr, account, champion, method, offsetDateTime, 0, 0, "0", status, deathCount, finalTime, producer);
+                OutLog(sessionRoomID, id, createRoomDate, ipAddr, account, champion, method, offsetDateTime, 0, 0, "0", status, deathCount, finalTime, producer);
             } else if (rand.nextDouble()>0.97 && itemCount < 6) {
                 itemCount += 1;
-                OutLog(id, ipAddr, account,champion, "/buyItem", offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
+                OutLog(sessionRoomID, id, createRoomDate, ipAddr, account,champion, "/buyItem", offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
             } else if (status == 1) {
-                OutLog(id, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
+                OutLog(sessionRoomID, id, createRoomDate, ipAddr, account,champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
                 status = 0;
                 deathCount += 1;
             } else {
-                OutLog(id, ipAddr, account, champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
+                OutLog(sessionRoomID, id, createRoomDate, ipAddr, account, champion, method, offsetDateTime, x_direction, y_direction, key, status, deathCount, finalTime, producer);
             }
         }
-        System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionID + ", champion="+ champion + ", durationSeconds=" + durationSeconds);
-        producer.close();
+        System.out.println("Stopping log generator (ipAddr=" + ipAddr +", account="+ account +", sessionID=" + sessionRoomID + ", champion="+ champion + ", durationSeconds=" + durationSeconds);
         this.latch.countDown();
     }
 
-    private  void OutLog(int id, String ipAddr, String account, String champion,String method, OffsetDateTime offsetDateTime, Integer x_direction, Integer y_direction, String key, Integer status, Integer deathCount, String finalTime, KafkaProducer<String, String> producer) {
+    private  void OutLog(String sessionRoomID,int id, OffsetDateTime createRoomDate, String ipAddr, String account, String champion,String method, OffsetDateTime offsetDateTime, Integer x_direction, Integer y_direction, String key, Integer status, Integer deathCount, String finalTime, KafkaProducer<String, String> producer) {
         String log = String.format(
                 "{" +
+                        "\"roomID\": \"%s\"," +
                         "\"id\": \"%s\"," +
+                        "\"createRoomDate\": \"%s\"," +
                         "\"ip\": \"%s\"," +
                         "\"account\": \"%s\"," +
                         "\"champion\": \"%s\"," +
@@ -119,7 +119,7 @@ public class DataGenerator implements Runnable{
                         "\"inputkey\": \"%s\"," +
                         "\"status\": \"%s\"," +
                         "\"deathCount\": \"%s\"," +
-                        "\"ingametime\": \"%s\"" + "}" ,id,ipAddr, account,champion, method,offsetDateTime,x_direction,y_direction,key,status, deathCount, finalTime
+                        "\"ingametime\": \"%s\"" + "}" ,sessionRoomID, id,createRoomDate, ipAddr, account,champion, method,offsetDateTime,x_direction,y_direction,key,status, deathCount, finalTime
         );
 
         JSONParser jsonParser = new JSONParser();
@@ -135,15 +135,15 @@ public class DataGenerator implements Runnable{
         return System.currentTimeMillis() - startTime < durationSeconds * 1000L;
     }
 
-   private String getMethod() {
-       if (rand.nextDouble() > 0.85) {
-           return "/wait";
-       }else {
-           return "/move";
-       }
-   }
+    private String getMethod() {
+        if (rand.nextDouble() > 0.85) {
+            return "/wait";
+        }else {
+            return "/move";
+        }
+    }
 
-   private int getX(){
+    private int getX(){
         int x = 0;
 
         if (rand.nextDouble() > 0.99) {
@@ -153,7 +153,7 @@ public class DataGenerator implements Runnable{
             x = rand.nextInt(400 - (-400) +1) + (-400);
             return x;
         }
-   }
+    }
 
     private int getY(){
         int y = 0;

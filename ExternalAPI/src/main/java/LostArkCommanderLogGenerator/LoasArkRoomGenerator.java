@@ -16,7 +16,7 @@ public class LoasArkRoomGenerator implements Runnable{
     static Random rand = new Random();
     static Set<String> ipSet = new HashSet<>();
     static Set<String> accSet = new HashSet<>();
-    static int durationSeconds = 1320;
+    static int durationSeconds = 1300;
 
     public LoasArkRoomGenerator(String sessionRoomID) {
         this.sessionRoomID = sessionRoomID;
