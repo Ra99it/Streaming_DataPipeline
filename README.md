@@ -36,9 +36,9 @@
 
 | Command | Description |
 | --- | --- |
-| 참가 인원 | 6명 |
-| 게임 시간 | 20분 |
-| 최종 수집 된 Log 갯수 | 약 4900개 |
+| 참가 인원 | 100명 |
+| 게임 시간 | 60분 |
+| 최종 수집 된 Log 갯수 | 약 25000개 |
 
 *한창 좋아했던 게임인 리그 오브 레전드를 참조했습니다.* <br>
 
@@ -53,12 +53,25 @@
 |![Azir](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/5b88072a-4f8d-4679-a941-765514e72ffc)|![Viktor](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/093c0efd-a463-464e-9b25-a9e3de626933)|![Orianna](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/e2964948-b8ae-4293-a5d8-a07db6cde62e)|![Vex](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/0138cf0a-47c4-4034-a60c-1f1bbf2966ee)|![Ryze](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/d69dca34-027a-4300-9266-61c0a6ae88bf)|![Zilean](https://github.com/Ra99it/Distributed-processing-and-cluster-operations-engineering/assets/122541545/38ac02e7-07f6-4d97-a489-a61990384340)|
 |일반유저|의심유저|일반유저|일반유저|일반유저|일반유저|
 
+|Ari|Anivia|AurelionSol|Lux|Malzahar|Neeko|
+|----|---|---|---|---|---|
+|![Ahri](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/adb183bd-d429-43a9-bc5d-edb0f0c80017)|![Anivia](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/7a4aac79-9ce0-4971-9f6d-4bcf222d44da)|![AurelionSol](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/486bfc58-2fb1-4cfd-a378-57c4d2eb63a7)|![Lux](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/0224f2e8-4af1-4ec8-8362-23b8a74d1417)|![Malzahar](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/e0d279b0-0f01-4178-a7bd-6cbddc5a1d6a)|![Neeko](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/1e67d8e7-fcb7-4a11-8b4e-a6d785bac2bf)|
+|일반유저|일반유저|일반유저|일반유저|일반유저|일반유저|
+
+|Sylas|Syndra|Taliyah|Xerath|Vladimir|
+|----|---|---|---|---|
+|![Sylas](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/54afe86f-6b0d-4166-9324-f40b71e12892)|![Syndra](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/5798ae4b-e5fe-457f-99a3-2ae2fd630d3d)|![Taliyah](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/9d88682a-ae9a-4192-bb4a-6d90912861d1)|![Xerath](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/80fce79d-fdd3-4cdd-b97b-2ae8524299e1)|![Vladimir](https://github.com/Ra99it/Before-Big-Data-Platform/assets/122541545/37d209d4-c05d-4f64-9a63-56369b5ce885)|
+|일반유저|일반유저|일반유저|일반유저|일반유저|일반유저|
+
 ----
-1. 해당 시나리오에서의 플레이어는 6명입니다.
-2. Viktor를 제외한 다른 챔피언은 정상적인 플레이어입니다.
-3. Vikttor를 플레이하는 플레이어는 외부 프로그램을 사용하고 있을 거 같은 의심 유저입니다.
-4. Viktor 사용자는 정상적인 사용자보다 마우스 좌표 이상값의 확률이 정상적인 사용자보다 많습니다.
-5. 해당 시나리오는 5대5가 아닌 6명이 각각 개인전을 한다는 설정으로 로그를 생성하고 수집합니다.
+1. 해당 시나리오에서의 플레이어는 100명입니다.
+2. 10명의 인원제한을 가진 방을 생성합니다.
+3. 총 10개의 방을 생성합니다.
+4. 챔피언(= 캐릭터)는 랜덤으로 생성됩니다.
+5. Viktor를 제외한 다른 챔피언은 정상적인 플레이어입니다.
+6. Vikttor를 플레이하는 플레이어는 외부 프로그램을 사용하고 있을 거 같은 의심 유저입니다.
+7. Viktor 사용자는 정상적인 사용자보다 마우스 좌표 이상값의 확률이 정상적인 사용자보다 많습니다.
+8. 해당 시나리오는 5대5가 아닌 6명이 각각 개인전을 한다는 설정으로 로그를 생성하고 수집합니다.
 ----
 <br>
 
@@ -310,14 +323,14 @@ Log
 
 | Command | Description |
 | --- | --- |
-| 참가 인원 | 100명 |
-| 게임 시간 | 20분 |
+| 참가 인원 | 1000명 |
+| 게임 시간 | 60분 |
 | 최종 수집 된 Log 갯수 | 약 1000개 |
 
 *사람들의 행동 분석 및 학습 또는 BI를 위해 제작했습니다*
 
 -----
-1. 사용자는 100명으로 구성됩니다.
+1. 사용자는 1000명으로 구성됩니다.
 2. 사용자는 광고를 보지 않거나, 보거나, 광고를 클릭하게 됩니다.
 3. 광고를 보고있는 시간과 클릭한 정보를 저장하게 됩니다.
 4. 사용자는 클릭을 했을 시, 약 1분 동안의 클릭은 집계되지 않습니다.
